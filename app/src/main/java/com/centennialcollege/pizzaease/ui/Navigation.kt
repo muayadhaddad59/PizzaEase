@@ -3,12 +3,17 @@ package ir.ehsan.asmrfooddelivery.ui
 import android.content.Context
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.platform.LocalContext
+import androidx.navigation.NavType
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
+import androidx.navigation.navArgument
+import com.centennialcollege.pizzaease.dao.FoodDao
+import com.centennialcollege.pizzaease.model.Food
 import com.centennialcollege.pizzaease.ui.screens.AuthScreen
 import com.centennialcollege.pizzaease.ui.screens.FoodScreen
 import com.centennialcollege.pizzaease.ui.screens.HomeScreen
+import java.util.UUID
 
 @Composable
 fun Navigation() {
@@ -23,8 +28,21 @@ fun Navigation() {
         composable("home"){
             HomeScreen(navController = navController)
         }
-        composable("food"){
-            FoodScreen(navController = navController)
+        composable(
+            route = "food/{id}",
+            arguments = listOf(navArgument("id") { type = NavType.StringType })
+        ){ backStackEntry ->
+            val id = backStackEntry.arguments?.getString("id")
+            val food = FoodDao.getFood(UUID.fromString(id))
+            food?.let { // Check if food is not null
+                val food: Food = it // Safe cast to non-nullable Food
+                FoodScreen(navController = navController, food = food)
+                println("Food name: ${food.name}")
+                println("Food type: ${food.type}")
+                // Access other properties of the non-null food object as needed
+            } ?: run {
+                println("Food not found")
+            }
         }
     }
 }

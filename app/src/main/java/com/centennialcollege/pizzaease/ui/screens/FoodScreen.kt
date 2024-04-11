@@ -39,11 +39,13 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
+import com.centennialcollege.pizzaease.dao.FoodDao
+import com.centennialcollege.pizzaease.model.Food
 import com.centennialcollege.pizzaease.ui.theme.ubuntuFont
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun FoodScreen(navController: NavController) {
+fun FoodScreen(navController: NavController, food: Food) {
     Scaffold(
         topBar = {
             CenterAlignedTopAppBar(
@@ -76,13 +78,13 @@ fun FoodScreen(navController: NavController) {
                 modifier= Modifier
                     .fillMaxWidth()
                     .heightIn(max = 200.dp),
-                painter = painterResource(id = foods.random().image),
+                painter = painterResource(id = food.image),
                 contentDescription = null,
                 contentScale = ContentScale.Crop
             )
             Spacer(modifier = Modifier.height(16.dp))
             Column(modifier=Modifier.padding(horizontal = 16.dp)) {
-                Text(text = foods.random().name, fontSize = 18.sp, fontWeight = FontWeight.Bold)
+                Text(text = food.name, fontSize = 18.sp, fontWeight = FontWeight.Bold)
                 Spacer(modifier = Modifier.height(16.dp))
                 Text(text = "187$", fontSize = 17.sp)
                 Spacer(modifier = Modifier.height(16.dp))
@@ -102,9 +104,9 @@ fun FoodScreen(navController: NavController) {
             fontWeight = FontWeight.Bold, fontSize = 17.sp)
             Spacer(modifier = Modifier.height(16.dp))
             LazyRow(horizontalArrangement = Arrangement.spacedBy(16.dp)){
-                items(foods){ food->
+                items(FoodDao.getAllFood ()){ food->
                     RecommendedFood(food = food, onTap = {food->
-                        // Do Something you want..
+                        navController.navigate("food/${food.id}")
                     })
                 }
             }
