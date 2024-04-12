@@ -46,6 +46,7 @@ import com.centennialcollege.pizzaease.R
 import com.centennialcollege.pizzaease.dao.FoodDao
 import com.centennialcollege.pizzaease.model.Food
 import com.centennialcollege.pizzaease.model.FoodType
+import com.centennialcollege.pizzaease.model.PizzaSize
 import com.centennialcollege.pizzaease.ui.components.TabLayout
 import com.centennialcollege.pizzaease.ui.theme.ubuntuFont
 import com.google.accompanist.systemuicontroller.rememberSystemUiController
@@ -65,7 +66,7 @@ fun HomeScreen(navController: NavController) {
             navigationIcon = {
                 Row {
                     Spacer(modifier = Modifier.width(8.dp))
-                    Icon(imageVector = Icons.Rounded.ArrowBack, contentDescription = null)
+                   // Icon(imageVector = Icons.Rounded.ArrowBack, contentDescription = null)
                 }
             }
         )
@@ -167,7 +168,7 @@ fun Foods(items: List<Food>, onLikeChange: (Food) -> Unit, onTap: (Food) -> Unit
                         Spacer(modifier = Modifier.height(16.dp))
                         Text(text = food.name, fontSize = 15.sp, color = Color(0xff383838))
                         Spacer(modifier = Modifier.height(2.dp))
-                        Text(text = "${food.price}$")
+                        Text(text = "from ${food.sizePriceMap[PizzaSize.Small]}$")
                         Spacer(modifier = Modifier.height(10.dp))
                     }
                 }

@@ -1,7 +1,6 @@
 package com.centennialcollege.pizzaease.model
 
 import androidx.annotation.DrawableRes
-import com.centennialcollege.pizzaease.R
 import kotlinx.serialization.Serializable
 import java.util.UUID
 
@@ -12,10 +11,17 @@ data class Food(
     @DrawableRes val image: Int,
     val type: FoodType,
     val liked: Boolean = false,
-    val price: Int = (10..100).random()
+    val sizePriceMap: Map<PizzaSize, Double>,
 )
 
+@Serializable
+enum class PizzaSize(val size: String) {
+    Small("10\""),
+    Medium("12\""),
+    Large("14\""),
+}
 @Serializable
 enum class FoodType {
     Pizza
 }
+

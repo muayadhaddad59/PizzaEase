@@ -1,21 +1,14 @@
 package com.centennialcollege.pizzaease.ui.screens
 
-import androidx.compose.animation.core.animateDpAsState
-import androidx.compose.animation.core.animateFloat
-import androidx.compose.animation.core.animateFloatAsState
-import androidx.compose.animation.core.tween
-import androidx.compose.animation.core.updateTransition
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
-import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
-import androidx.compose.foundation.layout.heightIn
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.sizeIn
@@ -40,28 +33,27 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.draw.alpha
-import androidx.compose.ui.draw.scale
 import androidx.compose.ui.draw.shadow
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
-import androidx.compose.ui.layout.onGloballyPositioned
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
-import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
-import androidx.compose.ui.unit.max
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
 import com.centennialcollege.pizzaease.R
 import com.centennialcollege.pizzaease.dao.FoodDao
 import com.centennialcollege.pizzaease.model.Food
+import com.centennialcollege.pizzaease.model.PizzaSize
+import com.centennialcollege.pizzaease.ui.components.ExpandableImage
+import com.centennialcollege.pizzaease.ui.components.PizzaSizeSelector
 import com.centennialcollege.pizzaease.ui.theme.ubuntuFont
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun FoodScreen(navController: NavController, food: Food) {
+    var selectedSize by remember { mutableStateOf(PizzaSize.Small) }
 
     Scaffold(
         topBar = {
@@ -100,21 +92,15 @@ fun FoodScreen(navController: NavController, food: Food) {
             Column(modifier=Modifier.padding(horizontal = 16.dp)) {
                 Text(text = food.name, fontSize = 18.sp, fontWeight = FontWeight.Bold)
                 Spacer(modifier = Modifier.height(16.dp))
-                Text(text = "187$", fontSize = 17.sp)
-                Spacer(modifier = Modifier.height(16.dp))
-                Text(text = "Size", fontSize = 14.sp, fontWeight = FontWeight.Bold)
-                Spacer(modifier = Modifier.height(2.dp))
-                Image(
-                    modifier = Modifier
-                        .size(50.dp)
-                        .clickable {
-                            // TODO
-                        },
-                    painter = painterResource(
-                        id = R.drawable.ic_pizza_24
-                    ),
-                    contentDescription = null
+                PizzaSizeSelector(
+                    sizes = PizzaSize.values().toList(),
+                    onSizeSelected = { size ->
+                        selectedSize = size
+                    },
+                    selectedSize = selectedSize
                 )
+                Text(text = "CAD$ ${food.sizePriceMap[selectedSize]}", fontSize = 17.sp)
+                Spacer(modifier = Modifier.height(16.dp))
             }
             Spacer(modifier = Modifier.height(16.dp))
             Divider(thickness = 2.dp)
@@ -173,7 +159,7 @@ fun RecommendedFood(food: Food, onTap:(Food)->Unit) {
                 Spacer(modifier = Modifier.height(8.dp))
                 Text(text = food.name, color = Color(0xff313131), fontSize = 13.sp)
                 Spacer(modifier = Modifier.height(4.dp))
-                Text(text = "${food.price}$")
+                Text(text = "from ${food.sizePriceMap[PizzaSize.Small]}$")
                 Spacer(modifier = Modifier.height(4.dp))
 
             }
@@ -181,55 +167,4 @@ fun RecommendedFood(food: Food, onTap:(Food)->Unit) {
     }
 }
 
-@Composable
-fun ExpandableImage(
-    drawableId: Int,
-    modifier: Modifier = Modifier,
-) {
-    val expandedState = remember { mutableStateOf(false) }
-    val alpha = animateFloatAsState(
-        targetValue = if (expandedState.value) 0.5f else 1f,
-        animationSpec = tween(durationMillis = 700)
-    )
-    
-    // Measure the original height of the image
-    var originalHeight by remember(drawableId) {
-        mutableStateOf(500.dp)
-    }
 
-    val height = animateDpAsState(
-        targetValue = if (expandedState.value) originalHeight else 200.dp, // Adjust the expanded height here
-        animationSpec = tween(durationMillis = 500)
-    )
-
-    Box(modifier = modifier.height(height.value)) {
-        Image(
-            painter = painterResource(id = drawableId),
-            contentDescription = null,
-            contentScale = ContentScale.Crop,
-            modifier = Modifier
-                .fillMaxWidth()
-                .alpha(alpha.value)
-                .clickable {
-                    expandedState.value = !expandedState.value
-                },
-        )
-    }
-}
-@Composable
-private fun getImageOriginalHeight(drawableId: Int): Dp {
-    var height by remember { mutableStateOf(0) }
-
-    // Measure the original height of the image
-    Image(
-        painter = painterResource(id = drawableId),
-        contentDescription = null,
-        contentScale = ContentScale.Crop,
-        modifier = Modifier
-            .onGloballyPositioned { coordinates ->
-                height = coordinates.size.height
-            }
-    )
-
-    return height.dp
-}
