@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "856835668516",
+    "project_id": "pizza-75691",
+    "storage_bucket": "pizza-75691.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:856835668516:android:8d01c18dc363d17b6a76b1",
+        "android_client_info": {
+          "package_name": "com.centennialcollege.pizzaease"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDBTfox0-p0jme-bn5nR-F-BoHJuOPVdVY"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
