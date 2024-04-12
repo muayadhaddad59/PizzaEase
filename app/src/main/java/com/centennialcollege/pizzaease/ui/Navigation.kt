@@ -11,6 +11,7 @@ import androidx.navigation.navArgument
 import com.centennialcollege.pizzaease.dao.FoodDao
 import com.centennialcollege.pizzaease.model.Food
 import com.centennialcollege.pizzaease.ui.screens.AuthScreen
+import com.centennialcollege.pizzaease.ui.screens.OrderScreen
 import com.centennialcollege.pizzaease.ui.screens.FoodScreen
 import com.centennialcollege.pizzaease.ui.screens.HomeScreen
 import java.util.UUID
@@ -27,6 +28,18 @@ fun Navigation() {
         }
         composable("home"){
             HomeScreen(navController = navController)
+        }
+        composable("order/{foodName}/{foodPrice}/{foodSize}") { backStackEntry ->
+            val foodName = backStackEntry.arguments?.getString("foodName")
+            val foodPrice = backStackEntry.arguments?.getString("foodPrice")
+            val foodSize = backStackEntry.arguments?.getString("foodSize")
+
+            OrderScreen(
+                navController = navController,
+                foodName = foodName.orEmpty(),
+                foodPrice = foodPrice.orEmpty(),
+                foodSize = foodSize.orEmpty()
+            )
         }
         composable(
             route = "food/{id}",
