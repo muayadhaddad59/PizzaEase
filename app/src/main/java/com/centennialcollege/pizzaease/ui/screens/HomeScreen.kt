@@ -1,6 +1,5 @@
 package com.centennialcollege.pizzaease.ui.screens
 
-import androidx.annotation.DrawableRes
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
@@ -39,118 +38,19 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
 import com.centennialcollege.pizzaease.R
-import com.google.accompanist.systemuicontroller.rememberSystemUiController
+import com.centennialcollege.pizzaease.dao.FoodDao
+import com.centennialcollege.pizzaease.model.Food
+import com.centennialcollege.pizzaease.model.FoodType
+import com.centennialcollege.pizzaease.model.PizzaSize
 import com.centennialcollege.pizzaease.ui.components.TabLayout
 import com.centennialcollege.pizzaease.ui.theme.ubuntuFont
+import com.google.accompanist.systemuicontroller.rememberSystemUiController
 
-data class Food(
-    val name: String,
-    @DrawableRes val image: Int,
-    val type: FoodType,
-    val liked: Boolean = false,
-    val price: Int = (10..100).random()
-)
-
-enum class FoodType {
-    Meal, Side, Snack
-}
-
-val foods = listOf(
-    Food(
-        name = "Meal 1",
-        image = R.drawable.meal_1,
-        type = FoodType.Meal
-    ),
-    Food(
-        name = "Meal 2",
-        image = R.drawable.meal_2,
-        type = FoodType.Meal
-    ),
-    Food(
-        name = "Meal 3",
-        image = R.drawable.meal_3,
-        type = FoodType.Meal
-    ),
-    Food(
-        name = "Meal 4",
-        image = R.drawable.meal_4,
-        type = FoodType.Meal
-    ),
-    Food(
-        name = "Meal 5",
-        image = R.drawable.meal_5,
-        type = FoodType.Meal
-    ),
-    Food(
-        name = "Meal 6",
-        image = R.drawable.meal_6,
-        type = FoodType.Meal
-    ),
-    Food(
-        name = "Side 1",
-        image = R.drawable.sides_1,
-        type = FoodType.Side
-    ),
-    Food(
-        name = "Side 2",
-        image = R.drawable.sides_2,
-        type = FoodType.Side
-    ),
-    Food(
-        name = "Side 3",
-        image = R.drawable.sides_3,
-        type = FoodType.Side
-    ),
-    Food(
-        name = "Side 4",
-        image = R.drawable.sides_4,
-        type = FoodType.Side
-    ),
-    Food(
-        name = "Side 5",
-        image = R.drawable.sides_5,
-        type = FoodType.Side
-    ),
-    Food(
-        name = "Side 6",
-        image = R.drawable.sides_6,
-        type = FoodType.Side
-    ),
-    Food(
-        name = "Snack 1",
-        image = R.drawable.snacks_1,
-        type = FoodType.Snack
-    ),
-    Food(
-        name = "Snack 2",
-        image = R.drawable.snacks_2,
-        type = FoodType.Snack
-    ),
-    Food(
-        name = "Snack 3",
-        image = R.drawable.snacks_3,
-        type = FoodType.Snack
-    ),
-    Food(
-        name = "Snack 4",
-        image = R.drawable.snacks_4,
-        type = FoodType.Snack
-    ),
-    Food(
-        name = "Snack 5",
-        image = R.drawable.snacks_5,
-        type = FoodType.Snack
-    ),
-    Food(
-        name = "Snack 6",
-        image = R.drawable.snacks_6,
-        type = FoodType.Snack
-    ),
-)
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -161,12 +61,12 @@ fun HomeScreen(navController: NavController) {
     Scaffold(topBar = {
         CenterAlignedTopAppBar(
             title = {
-                Text(text = "Our Menu", fontFamily = ubuntuFont)
+                Text(text = "Menu", fontFamily = ubuntuFont)
             },
             navigationIcon = {
                 Row {
                     Spacer(modifier = Modifier.width(8.dp))
-                    Icon(imageVector = Icons.Rounded.ArrowBack, contentDescription = null)
+                   // Icon(imageVector = Icons.Rounded.ArrowBack, contentDescription = null)
                 }
             }
         )
@@ -175,8 +75,9 @@ fun HomeScreen(navController: NavController) {
             val selectedFoodType = remember {
                 mutableIntStateOf(0)
             }
+            val foods = FoodDao.getAllFood()
             val foodsState = remember {
-                mutableStateListOf(*(foods + foods).toTypedArray())
+                mutableStateListOf(*(foods).toTypedArray())
             }
             val onLikeChange: (Food) -> Unit = {
                 foodsState[foodsState.indexOf(it)] =
@@ -185,30 +86,12 @@ fun HomeScreen(navController: NavController) {
             Spacer(modifier = Modifier.height(16.dp))
             TabLayout(
                 items = listOf(
-                    "Meals" to {
+                    "Pizza" to {
                         Foods(
-                            items = foodsState.filter { it.type == FoodType.Meal },
+                            items = foodsState.filter { it.type == FoodType.Pizza },
                             onLikeChange = onLikeChange,
                             onTap = {
-                                navController.navigate("food")
-                            }
-                        )
-                    },
-                    "Sides" to {
-                        Foods(
-                            items = foodsState.filter { it.type == FoodType.Side },
-                            onLikeChange = onLikeChange,
-                            onTap = {
-                                navController.navigate("food")
-                            }
-                        )
-                    },
-                    "Snacks" to {
-                        Foods(
-                            items = foodsState.filter { it.type == FoodType.Snack },
-                            onLikeChange = onLikeChange,
-                            onTap = {
-                                navController.navigate("food")
+                                navController.navigate("food/${it.id}")
                             }
                         )
                     },
@@ -285,7 +168,7 @@ fun Foods(items: List<Food>, onLikeChange: (Food) -> Unit, onTap: (Food) -> Unit
                         Spacer(modifier = Modifier.height(16.dp))
                         Text(text = food.name, fontSize = 15.sp, color = Color(0xff383838))
                         Spacer(modifier = Modifier.height(2.dp))
-                        Text(text = "${food.price}$")
+                        Text(text = "from ${food.sizePriceMap[PizzaSize.Small]}$")
                         Spacer(modifier = Modifier.height(10.dp))
                     }
                 }

@@ -1,13 +1,23 @@
 {
   "project_info": {
+<<<<<<< HEAD
     "project_number": "856835668516",
     "project_id": "pizza-75691",
     "storage_bucket": "pizza-75691.appspot.com"
+=======
+    "project_number": "876285767261",
+    "project_id": "pizzaease-b3c36",
+    "storage_bucket": "pizzaease-b3c36.appspot.com"
+>>>>>>> 04e94c5a1e3cab9307a5efbd201907c908744d87
   },
   "client": [
     {
       "client_info": {
+<<<<<<< HEAD
         "mobilesdk_app_id": "1:856835668516:android:8d01c18dc363d17b6a76b1",
+=======
+        "mobilesdk_app_id": "1:876285767261:android:87a09a7b90b94bfb4167b4",
+>>>>>>> 04e94c5a1e3cab9307a5efbd201907c908744d87
         "android_client_info": {
           "package_name": "com.centennialcollege.pizzaease"
         }
@@ -15,7 +25,11 @@
       "oauth_client": [],
       "api_key": [
         {
+<<<<<<< HEAD
           "current_key": "AIzaSyDBTfox0-p0jme-bn5nR-F-BoHJuOPVdVY"
+=======
+          "current_key": "AIzaSyC51M5GEy3y7byPC1d2img-wylKciD6YuQ"
+>>>>>>> 04e94c5a1e3cab9307a5efbd201907c908744d87
         }
       ],
       "services": {

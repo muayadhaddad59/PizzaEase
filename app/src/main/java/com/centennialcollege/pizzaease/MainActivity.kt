@@ -9,10 +9,13 @@ import androidx.compose.material3.Surface
 import androidx.compose.ui.Modifier
 import ir.ehsan.asmrfooddelivery.ui.Navigation
 import com.centennialcollege.pizzaease.ui.theme.AsmrFoodDeliveryTheme
+import com.google.firebase.Firebase
+import com.google.firebase.firestore.firestore
 
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        val db = Firebase.firestore
         setContent {
             AsmrFoodDeliveryTheme {
                 // A surface container using the 'background' color from the theme
