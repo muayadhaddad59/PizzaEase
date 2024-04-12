@@ -1,8 +1,14 @@
 package com.centennialcollege.pizzaease.ui.screens
 
+import androidx.compose.animation.core.animateDpAsState
+import androidx.compose.animation.core.animateFloat
+import androidx.compose.animation.core.animateFloatAsState
+import androidx.compose.animation.core.tween
+import androidx.compose.animation.core.updateTransition
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
@@ -29,16 +35,26 @@ import androidx.compose.material3.Icon
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.alpha
+import androidx.compose.ui.draw.scale
 import androidx.compose.ui.draw.shadow
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.layout.onGloballyPositioned
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
+import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.max
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
+import com.centennialcollege.pizzaease.R
 import com.centennialcollege.pizzaease.dao.FoodDao
 import com.centennialcollege.pizzaease.model.Food
 import com.centennialcollege.pizzaease.ui.theme.ubuntuFont
@@ -46,6 +62,7 @@ import com.centennialcollege.pizzaease.ui.theme.ubuntuFont
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun FoodScreen(navController: NavController, food: Food) {
+
     Scaffold(
         topBar = {
             CenterAlignedTopAppBar(
@@ -74,13 +91,10 @@ fun FoodScreen(navController: NavController, food: Food) {
             .fillMaxSize()
             .padding(paddings)
             .verticalScroll(rememberScrollState())) {
-            Image(
-                modifier= Modifier
+            ExpandableImage(
+                drawableId = food.image,
+                modifier = Modifier
                     .fillMaxWidth()
-                    .heightIn(max = 200.dp),
-                painter = painterResource(id = food.image),
-                contentDescription = null,
-                contentScale = ContentScale.Crop
             )
             Spacer(modifier = Modifier.height(16.dp))
             Column(modifier=Modifier.padding(horizontal = 16.dp)) {
@@ -88,13 +102,18 @@ fun FoodScreen(navController: NavController, food: Food) {
                 Spacer(modifier = Modifier.height(16.dp))
                 Text(text = "187$", fontSize = 17.sp)
                 Spacer(modifier = Modifier.height(16.dp))
-                Text(text = "Description", fontSize = 14.sp, fontWeight = FontWeight.Bold)
+                Text(text = "Size", fontSize = 14.sp, fontWeight = FontWeight.Bold)
                 Spacer(modifier = Modifier.height(2.dp))
-                Text(
-                    text = "In publishing and graphic design, Lorem ipsum is a placeholder text commonly used to demonstrate the visual form of a document or a typeface without relying on meaningful content. Lorem ipsum may be used as a placeholder before final copy is available.",
-                    fontSize = 13.sp,
-                    textAlign = TextAlign.Justify,
-                    color = Color(0xff313131)
+                Image(
+                    modifier = Modifier
+                        .size(50.dp)
+                        .clickable {
+                            // TODO
+                        },
+                    painter = painterResource(
+                        id = R.drawable.ic_pizza_24
+                    ),
+                    contentDescription = null
                 )
             }
             Spacer(modifier = Modifier.height(16.dp))
@@ -160,4 +179,57 @@ fun RecommendedFood(food: Food, onTap:(Food)->Unit) {
             }
         }
     }
+}
+
+@Composable
+fun ExpandableImage(
+    drawableId: Int,
+    modifier: Modifier = Modifier,
+) {
+    val expandedState = remember { mutableStateOf(false) }
+    val alpha = animateFloatAsState(
+        targetValue = if (expandedState.value) 0.5f else 1f,
+        animationSpec = tween(durationMillis = 700)
+    )
+    
+    // Measure the original height of the image
+    var originalHeight by remember(drawableId) {
+        mutableStateOf(500.dp)
+    }
+
+    val height = animateDpAsState(
+        targetValue = if (expandedState.value) originalHeight else 200.dp, // Adjust the expanded height here
+        animationSpec = tween(durationMillis = 500)
+    )
+
+    Box(modifier = modifier.height(height.value)) {
+        Image(
+            painter = painterResource(id = drawableId),
+            contentDescription = null,
+            contentScale = ContentScale.Crop,
+            modifier = Modifier
+                .fillMaxWidth()
+                .alpha(alpha.value)
+                .clickable {
+                    expandedState.value = !expandedState.value
+                },
+        )
+    }
+}
+@Composable
+private fun getImageOriginalHeight(drawableId: Int): Dp {
+    var height by remember { mutableStateOf(0) }
+
+    // Measure the original height of the image
+    Image(
+        painter = painterResource(id = drawableId),
+        contentDescription = null,
+        contentScale = ContentScale.Crop,
+        modifier = Modifier
+            .onGloballyPositioned { coordinates ->
+                height = coordinates.size.height
+            }
+    )
+
+    return height.dp
 }
