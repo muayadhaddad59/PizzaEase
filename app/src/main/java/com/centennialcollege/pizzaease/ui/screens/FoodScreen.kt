@@ -152,7 +152,7 @@ fun FoodScreen(navController: NavController, food: Food) {
                         // Perform action when the button is clicked
                         // For example, you can navigate to a new screen
                         coroutineScope.launch {
-                            navController.navigate("order/${food.name}/${food.sizePriceMap[selectedSize]}/${food.sizePriceMap[selectedSize]}")
+                            navController.navigate("order/${food.name}/${food.sizePriceMap[selectedSize]}/${selectedSize}")
                         }
                     },
                     modifier = Modifier.fillMaxWidth()

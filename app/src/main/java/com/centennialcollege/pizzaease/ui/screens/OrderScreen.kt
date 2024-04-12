@@ -8,6 +8,7 @@ import androidx.compose.material3.Button
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
+import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBar
@@ -25,20 +26,26 @@ import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
 
 import com.google.firebase.firestore.FirebaseFirestore
-
 @SuppressLint("UnusedMaterial3ScaffoldPaddingParameter")
 @OptIn(ExperimentalMaterial3Api::class)
-// Inside OrderScreen composable
 @Composable
-fun OrderScreen(navController: NavController, foodName: String, foodPrice: String, foodSize: String) {
-    // Declare a variable to track whether the order has been successfully placed
+fun OrderScreen(
+    navController: NavController,
+    foodName: String,
+    foodPrice: String,
+    foodSize: String
+) {
+    var customerName by remember { mutableStateOf("") }
+    var phoneNumber by remember { mutableStateOf("") }
+    var address by remember { mutableStateOf("") }
+
     var orderPlaced by remember { mutableStateOf(false) }
 
     Scaffold(
         topBar = {
             TopAppBar(
                 title = {
-                    Text(text = "Customize", fontWeight = FontWeight.Bold)
+                    Text(text = "Order Details", fontWeight = FontWeight.Bold)
                 },
                 navigationIcon = {
                     IconButton(
@@ -63,14 +70,9 @@ fun OrderScreen(navController: NavController, foodName: String, foodPrice: Strin
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
             Text(
-                text = "Customize Your Order",
-                fontSize = 20.sp,
-                fontWeight = FontWeight.Bold,
-                modifier = Modifier.padding(bottom = 16.dp)
-            )
-            Text(
                 text = "Food Name: $foodName",
-                fontSize = 16.sp,
+                fontSize = 18.sp,
+                fontWeight = FontWeight.Bold,
                 modifier = Modifier.padding(bottom = 8.dp)
             )
             Text(
@@ -79,25 +81,58 @@ fun OrderScreen(navController: NavController, foodName: String, foodPrice: Strin
                 modifier = Modifier.padding(bottom = 8.dp)
             )
             Text(
-                text = "Price: $foodPrice",
+                text = "Price: $$foodPrice",
                 fontSize = 16.sp,
                 modifier = Modifier.padding(bottom = 16.dp)
             )
+
+            // Text fields for customer information
+            OutlinedTextField(
+                value = customerName,
+                onValueChange = { customerName = it },
+                label = { Text("Customer Name") },
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(vertical = 4.dp)
+            )
+            OutlinedTextField(
+                value = phoneNumber,
+                onValueChange = { phoneNumber = it },
+                label = { Text("Phone Number") },
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(vertical = 4.dp)
+            )
+            OutlinedTextField(
+                value = address,
+                onValueChange = { address = it },
+                label = { Text("Address") },
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(vertical = 4.dp)
+            )
+
             Button(
                 onClick = {
-                    // Call function to send order to Firestore
-                    sendOrderToFirestore(foodName, foodPrice, foodSize)
-                    // Set orderPlaced to true to indicate that the order has been successfully placed
+                    sendOrderToFirestore(
+                        foodName = foodName,
+                        foodPrice = foodPrice,
+                        foodSize = foodSize,
+                        customerName = customerName,
+                        phoneNumber = phoneNumber,
+                        address = address
+                    )
                     orderPlaced = true
                 },
                 modifier = Modifier
                     .widthIn(max = 200.dp)
-                    .height(50.dp),
+                    .height(50.dp)
+                    .padding(top = 16.dp),
                 shape = RoundedCornerShape(8.dp)
             ) {
                 Text(text = "Place Order", fontWeight = FontWeight.Bold)
             }
-            // Display a message when the order has been successfully placed
+
             if (orderPlaced) {
                 Text(
                     text = "Your order has been successfully placed!",
@@ -111,12 +146,22 @@ fun OrderScreen(navController: NavController, foodName: String, foodPrice: Strin
 }
 
 
-fun sendOrderToFirestore(foodName: String, foodPrice: String, foodSize: String) {
+fun sendOrderToFirestore(
+    foodName: String,
+    foodPrice: String,
+    foodSize: String,
+    customerName: String,
+    phoneNumber: String,
+    address: String
+) {
     val db = FirebaseFirestore.getInstance()
     val orderDetails = hashMapOf(
         "foodName" to foodName,
         "foodPrice" to foodPrice,
-        "foodSize" to foodSize
+        "foodSize" to foodSize,
+        "customerName" to customerName,
+        "phoneNumber" to phoneNumber,
+        "address" to address
     )
 
     db.collection("orders")
