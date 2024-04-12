@@ -41,6 +41,10 @@ fun OrderScreen(
 
     var orderPlaced by remember { mutableStateOf(false) }
 
+    var isCustomerNameValid by remember { mutableStateOf(true) }
+    var isPhoneNumberValid by remember { mutableStateOf(true) }
+    var isAddressValid by remember { mutableStateOf(true) }
+
     Scaffold(
         topBar = {
             TopAppBar(
@@ -86,43 +90,57 @@ fun OrderScreen(
                 modifier = Modifier.padding(bottom = 16.dp)
             )
 
-            // Text fields for customer information
             OutlinedTextField(
                 value = customerName,
-                onValueChange = { customerName = it },
+                onValueChange = {
+                    customerName = it
+                    isCustomerNameValid = it.isNotBlank()
+                },
                 label = { Text("Customer Name") },
+                isError = !isCustomerNameValid,
                 modifier = Modifier
                     .fillMaxWidth()
                     .padding(vertical = 4.dp)
             )
             OutlinedTextField(
                 value = phoneNumber,
-                onValueChange = { phoneNumber = it },
+                onValueChange = {
+                    phoneNumber = it
+                    isPhoneNumberValid = it.isNotBlank()
+                },
                 label = { Text("Phone Number") },
+                isError = !isPhoneNumberValid,
                 modifier = Modifier
                     .fillMaxWidth()
                     .padding(vertical = 4.dp)
             )
             OutlinedTextField(
                 value = address,
-                onValueChange = { address = it },
+                onValueChange = {
+                    address = it
+                    isAddressValid = it.isNotBlank()
+                },
                 label = { Text("Address") },
+                isError = !isAddressValid,
                 modifier = Modifier
                     .fillMaxWidth()
                     .padding(vertical = 4.dp)
             )
 
+            // Button to place order
             Button(
                 onClick = {
-                    sendOrderToFirestore(
-                        foodName = foodName,
-                        foodPrice = foodPrice,
-                        foodSize = foodSize,
-                        customerName = customerName,
-                        phoneNumber = phoneNumber,
-                        address = address
-                    )
-                    orderPlaced = true
+                    if (isCustomerNameValid && isPhoneNumberValid && isAddressValid) {
+                        sendOrderToFirestore(
+                            foodName = foodName,
+                            foodPrice = foodPrice,
+                            foodSize = foodSize,
+                            customerName = customerName,
+                            phoneNumber = phoneNumber,
+                            address = address
+                        )
+                        orderPlaced = true
+                    }
                 },
                 modifier = Modifier
                     .widthIn(max = 200.dp)
