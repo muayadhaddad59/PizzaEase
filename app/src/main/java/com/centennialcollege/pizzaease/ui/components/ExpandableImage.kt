@@ -15,7 +15,7 @@ import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
 
-
+//animation that shows a bigger size of the image when tapped
 @Composable
 fun ExpandableImage(
     drawableId: Int,
@@ -24,7 +24,7 @@ fun ExpandableImage(
     val expandedState = remember { mutableStateOf(false) }
 
     val height = animateDpAsState(
-        targetValue = if (expandedState.value) 500.dp else 200.dp, // Adjust the expanded height here
+        targetValue = if (expandedState.value) 1000.dp else 200.dp, // Adjust the expanded height
         animationSpec = tween(durationMillis = 1000)
     )
 

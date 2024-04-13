@@ -4,10 +4,12 @@ import androidx.annotation.DrawableRes
 import kotlinx.serialization.Serializable
 import java.util.UUID
 
+//define and serialize pizza and sizes
 @Serializable
 data class Food(
-    val id : UUID,
+    val id : UUID, //unique id for pizza item
     val name: String,
+    val description: String,
     @DrawableRes val image: Int,
     val type: FoodType,
     val liked: Boolean = false,

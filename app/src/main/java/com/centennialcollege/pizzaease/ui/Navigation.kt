@@ -17,6 +17,7 @@ import com.centennialcollege.pizzaease.ui.screens.HomeScreen
 import java.util.UUID
 
 @Composable
+//sets up nav flow using navhost
 fun Navigation() {
     val navController = rememberNavController()
     val context = LocalContext.current

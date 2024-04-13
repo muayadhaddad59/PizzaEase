@@ -153,9 +153,9 @@ fun OrderScreen(navController: NavController, foodName: String, foodPrice: Strin
                     modifier = Modifier.padding(top = 8.dp)
                 ) {
                     Text(
-                        text = "Your order has been successfully placed!",
+                        text = "Your order is on the way! \uD83D\uDE00",
                         fontSize = 16.sp,
-                        color = Color.Green,
+                        color = Color.Blue,
                         modifier = Modifier.padding(bottom = 8.dp)
                     )
                     Text(
@@ -229,13 +229,14 @@ fun OrderScreen(navController: NavController, foodName: String, foodPrice: Strin
                         )
                         orderPlaced = true
                         showDialog = false
-                        // Clear text fields after confirming order
-                        customerName = ""
-                        phoneNumber = ""
-                        address = ""
+
                     }
                 ) {
                     Text("Confirm")
+                    // Clear text fields after confirming order
+//                    customerName = ""
+//                    phoneNumber = ""
+//                    address = ""
                 }
             },
             dismissButton = {

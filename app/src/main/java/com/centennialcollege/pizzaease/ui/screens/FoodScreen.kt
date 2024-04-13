@@ -60,7 +60,7 @@ fun FoodScreen(navController: NavController, food: Food) {
                     }
                 },
                 title = {
-                    Text(text = "Food", fontFamily = ubuntuFont)
+                    Text(text = "Pick your pizza", fontFamily = ubuntuFont)
                 },
                 actions = {
                     IconButton(
@@ -97,8 +97,9 @@ fun FoodScreen(navController: NavController, food: Food) {
                     text = food.name,
                     fontSize = 18.sp,
                     fontWeight = FontWeight.Bold
+
                 )
-                Spacer(modifier = Modifier.height(16.dp))
+                Spacer(modifier = Modifier.height(12.dp))
                 PizzaSizeSelector(
                     sizes = PizzaSize.values().toList(),
                     onSizeSelected = { size ->
@@ -116,6 +117,7 @@ fun FoodScreen(navController: NavController, food: Food) {
             Spacer(modifier = Modifier.height(16.dp))
             Divider(thickness = 2.dp)
             Spacer(modifier = Modifier.height(16.dp))
+
             Text(
                 text = "Recommended Foods:",
                 modifier = Modifier.padding(horizontal = 8.dp),
@@ -135,13 +137,13 @@ fun FoodScreen(navController: NavController, food: Food) {
             Spacer(modifier = Modifier.height(16.dp))
             Column(modifier = Modifier.padding(horizontal = 8.dp)) {
                 Text(
-                    text = "Rating & Reviews",
+                    text = "Description",
                     fontSize = 18.sp,
                     fontWeight = FontWeight.Bold
                 )
                 Spacer(modifier = Modifier.height(8.dp))
                 Text(
-                    text = "In publishing and graphic design, Lorem ipsum is a placeholder text commonly used to demonstrate the visual form of a document or a typeface without relying on meaningful content. Lorem ipsum may be used as a placeholder before final copy is available.",
+                    text = "${food.description}",
                     fontSize = 13.sp,
                     textAlign = TextAlign.Justify,
                     color = Color(0xff313131)
@@ -160,7 +162,7 @@ fun FoodScreen(navController: NavController, food: Food) {
                     Text(text = "Add", fontSize = 16.sp)
                 }
             }
-            Spacer(modifier = Modifier.height(8.dp))
+            Spacer(modifier = Modifier.fillMaxWidth())
         }
     }
 }

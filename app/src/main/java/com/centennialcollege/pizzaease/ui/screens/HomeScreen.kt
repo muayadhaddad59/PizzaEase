@@ -61,7 +61,7 @@ fun HomeScreen(navController: NavController) {
     Scaffold(topBar = {
         CenterAlignedTopAppBar(
             title = {
-                Text(text = "Menu", fontFamily = ubuntuFont)
+                Text(text = "Pizza Ease - order happiness", fontFamily = ubuntuFont)
             },
             navigationIcon = {
                 Row {
