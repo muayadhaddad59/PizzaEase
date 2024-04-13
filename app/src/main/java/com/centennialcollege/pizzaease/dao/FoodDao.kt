@@ -6,7 +6,7 @@ import com.centennialcollege.pizzaease.model.FoodType
 import com.centennialcollege.pizzaease.model.PizzaSize
 import java.util.UUID
 
-//list of available pizza and their details including images
+//list of available pizza and their details including name, description, image, and size
 object FoodDao {
 
     private val foods = listOf(
