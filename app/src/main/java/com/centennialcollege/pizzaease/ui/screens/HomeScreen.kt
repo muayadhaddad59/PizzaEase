@@ -52,7 +52,7 @@ import com.centennialcollege.pizzaease.ui.components.TabLayout
 import com.centennialcollege.pizzaease.ui.theme.ubuntuFont
 import com.google.accompanist.systemuicontroller.rememberSystemUiController
 
-
+//tabbed layout for different food items with card views, also homescreen
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun HomeScreen(navController: NavController) {
@@ -107,7 +107,7 @@ fun HomeScreen(navController: NavController) {
         }
     }
 }
-
+//display pizza products in card view
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun Foods(items: List<Food>, onLikeChange: (Food) -> Unit, onTap: (Food) -> Unit) {
