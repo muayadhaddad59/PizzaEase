@@ -25,7 +25,7 @@ fun ExpandableImage(
 
     val height = animateDpAsState(
         targetValue = if (expandedState.value) 500.dp else 200.dp, // Adjust the expanded height here
-        animationSpec = tween(durationMillis = 500)
+        animationSpec = tween(durationMillis = 1000)
     )
 
     Box(modifier = modifier.height(height.value)) {
