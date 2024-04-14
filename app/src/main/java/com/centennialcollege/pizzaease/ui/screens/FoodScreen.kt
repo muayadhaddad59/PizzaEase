@@ -162,6 +162,7 @@ fun FoodScreen(navController: NavController, food: Food) {
                     Text(text = "Add", fontSize = 16.sp)
                 }
             }
+            Spacer(modifier = Modifier.height(16.dp))
 
             // Divider for visual separation
             Divider(thickness = 2.dp)

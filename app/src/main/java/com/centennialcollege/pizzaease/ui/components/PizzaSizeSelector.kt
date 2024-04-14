@@ -18,18 +18,19 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.centennialcollege.pizzaease.model.PizzaSize
 
-
+//horizontal row of buttons for selecting pizza size in the foodscreen
 @Composable
 fun PizzaSizeSelector(
-    sizes: List<PizzaSize>,
-    onSizeSelected: (PizzaSize) -> Unit,
-    selectedSize: PizzaSize
+    sizes: List<PizzaSize>, // List of available pizza sizes
+    onSizeSelected: (PizzaSize) -> Unit, // Callback function when a size is selected
+    selectedSize: PizzaSize // Currently selected pizza size
 ) {
     Row {
         sizes.forEach { size ->
-            val isSelected = size == selectedSize
-            val backgroundColor = if (isSelected) MaterialTheme.colorScheme.primary else Color.White
-            val contentColor = if (isSelected) Color.White else MaterialTheme.colorScheme.primary
+            val isSelected = size == selectedSize // Check if the size is currently selected
+            val backgroundColor = if (isSelected) MaterialTheme.colorScheme.primary else Color.White // Background color based on selection
+            val contentColor = if (isSelected) Color.White else MaterialTheme.colorScheme.primary // Text color based on selection
+            // Click listener to select the size
             Button(
                 onClick = { onSizeSelected(size) },
                 colors = ButtonDefaults.buttonColors(
@@ -37,9 +38,9 @@ fun PizzaSizeSelector(
                     contentColor = contentColor
                 )
             ) {
-                Text(text = "${size.name} (${size.size})", style = MaterialTheme.typography.bodyMedium)
+                Text(text = "${size.name} (${size.size})", style = MaterialTheme.typography.bodySmall)
             }
-            Spacer(modifier = Modifier.width(8.dp))
+            Spacer(modifier = Modifier.width(4.dp))
         }
     }
 }
